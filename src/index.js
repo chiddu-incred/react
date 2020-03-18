@@ -37,6 +37,10 @@ class Board extends React.Component {
 			alert('Game over boss');
 			return;
 		}
+		if(this.state.squares[i]) {
+			// Clicking on an already filled square
+			return;
+		}
 		const squares = this.state.squares.slice();
 		squares[i] = this.state.xIsNext?'X':'O';
 		this.setState({squares: squares , xIsNext : !this.state.xIsNext });
