@@ -32,15 +32,6 @@ class Board extends React.Component {
 //
 //	}
 
-	handleClick(i) {
-		if(this.state.squares[i]) {
-			// Clicking on an already filled square
-			return;
-		}
-		const squares = this.state.squares.slice();
-		squares[i] = this.state.xIsNext?'X':'O';
-		this.setState({squares: squares , xIsNext : !this.state.xIsNext });
-	}
 
   renderSquare(i) {
     return ( 
@@ -80,7 +71,8 @@ class Game extends React.Component {
 		super(props);
 			this.state = {
 				history :  [ { squares : Array(9).fill(null) } ],
-				xIsNext : true
+				xIsNext : true,
+				stepNumber : 0
 			}
 	}
   render() {
@@ -122,9 +114,9 @@ class Game extends React.Component {
   }
 
 
-	handleClick(i) {
-	 const history = this.state.history;
-    const current = history[history.length - 1];
+handleClick(i) {
+	const history =  this.state.history.slice(0, this.state.stepNumber + 1);
+   const current = history[history.length - 1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -135,6 +127,13 @@ class Game extends React.Component {
         squares: squares,
       }]),
       xIsNext: !this.state.xIsNext,
+    });
+  }
+
+	jumpTo(step) {
+    this.setState({
+      stepNumber: step,
+      xIsNext: (step % 2) === 0,
     });
   }
 
